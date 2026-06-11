@@ -4,55 +4,46 @@
 
 @layer base {
   :root {
-    /* DeepState-inspired: тёмно-серый фон, синие акценты */
-    --background: 220 14% 10%;
-    --foreground: 220 10% 88%;
-
-    --card: 220 13% 13%;
-    --card-foreground: 220 10% 88%;
-
-    --popover: 220 13% 13%;
-    --popover-foreground: 220 10% 88%;
-
-    --primary: 210 85% 55%;
+    --background: 0 0% 98%;
+    --foreground: 220 15% 16%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 16%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 16%;
+    --primary: 28 100% 52%;
     --primary-foreground: 0 0% 100%;
-
-    --secondary: 220 12% 17%;
-    --secondary-foreground: 220 10% 72%;
-
-    --muted: 220 12% 16%;
-    --muted-foreground: 220 8% 48%;
-
-    --accent: 210 85% 55%;
+    --secondary: 0 0% 95%;
+    --secondary-foreground: 220 15% 20%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 220 8% 46%;
+    --accent: 28 100% 52%;
     --accent-foreground: 0 0% 100%;
-
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-
-    --border: 220 12% 20%;
-    --input: 220 12% 17%;
-    --ring: 210 85% 55%;
+    --border: 220 10% 88%;
+    --input: 0 0% 94%;
+    --ring: 28 100% 52%;
     --radius: 0.5rem;
 
-    /* DSM palette */
-    --dsm-bg: #141519;
-    --dsm-panel: #1c1e24;
-    --dsm-panel-alt: #22252d;
-    --dsm-border: #2e3240;
-    --dsm-text: #e2e4ea;
-    --dsm-muted: #6b7280;
-    --dsm-blue: #3b82f6;
-    --dsm-blue-dim: #1d4ed8;
-    --dsm-blue-glow: rgba(59, 130, 246, 0.15);
-    --dsm-red: #ef4444;
-    --dsm-red-dim: rgba(239, 68, 68, 0.15);
-    --dsm-orange: #f97316;
-    --dsm-yellow: #eab308;
-    --dsm-green: #22c55e;
-    --dsm-teal: #14b8a6;
-    --dsm-purple: #8b5cf6;
-    --dsm-white-20: rgba(255, 255, 255, 0.07);
-    --dsm-white-10: rgba(255, 255, 255, 0.04);
+    --ya-bg: #ffffff;
+    --ya-bg-soft: #f7f8fa;
+    --ya-bg-muted: #f0f2f5;
+    --ya-panel: #ffffff;
+    --ya-border: #e3e5ea;
+    --ya-border-soft: #eef0f4;
+    --ya-text: #21242c;
+    --ya-text-sec: #6b7280;
+    --ya-text-muted: #9ca3af;
+    --ya-orange: #ff7300;
+    --ya-orange-2: #ff8f2e;
+    --ya-orange-soft: rgba(255, 115, 0, 0.09);
+    --ya-blue: #2563eb;
+    --ya-blue-soft: rgba(37, 99, 235, 0.09);
+    --ya-red: #ef4444;
+    --ya-green: #16a34a;
+    --ya-yellow: #d97706;
+    --ya-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    --ya-shadow-lg: 0 4px 24px rgba(0, 0, 0, 0.11);
   }
 }
 
@@ -62,238 +53,194 @@
     box-sizing: border-box;
   }
   body {
-    background: var(--dsm-bg);
-    color: var(--dsm-text);
+    background: var(--ya-bg-soft);
+    color: var(--ya-text);
     font-family: "Golos Text", system-ui, sans-serif;
     overflow: hidden;
   }
   ::-webkit-scrollbar {
-    width: 3px;
-    height: 3px;
+    width: 4px;
+    height: 4px;
   }
   ::-webkit-scrollbar-track {
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--dsm-border);
-    border-radius: 2px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--dsm-muted);
+    background: var(--ya-border);
+    border-radius: 4px;
   }
 }
 
-/* ─── LEAFLET ─────────────────────────────────── */
+/* ── LEAFLET ───────────────────────────────── */
 .leaflet-container {
-  background: #0d0f14 !important;
+  background: #e8ecf0 !important;
   font-family: "Golos Text", sans-serif;
 }
-.leaflet-tile-pane {
-  filter: brightness(0.45) saturate(0.5) hue-rotate(195deg) contrast(1.05) !important;
-}
-.leaflet-control-zoom,
-.leaflet-control-attribution {
+.leaflet-control-zoom {
   display: none !important;
 }
+.leaflet-control-attribution {
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #9ca3af !important;
+  font-size: 9px !important;
+  border-radius: 4px 0 0 0 !important;
+  border: none !important;
+}
 .leaflet-popup-content-wrapper {
-  background: var(--dsm-panel) !important;
-  border: 1px solid var(--dsm-border) !important;
-  border-radius: 8px !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+  background: #fff !important;
+  border: 1px solid var(--ya-border) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--ya-shadow-lg) !important;
   padding: 0 !important;
 }
-.leaflet-popup-tip {
-  background: var(--dsm-panel) !important;
+.leaflet-popup-tip-container {
+  display: none;
 }
 .leaflet-popup-content {
   margin: 0 !important;
 }
 
-/* ─── DSM COMPONENTS ──────────────────────────── */
-.dsm-panel {
-  background: var(--dsm-panel);
-  border: 1px solid var(--dsm-border);
-  border-radius: 10px;
+/* ── ПАНЕЛИ ────────────────────────────────── */
+.ya-panel {
+  background: var(--ya-panel);
+  border: 1px solid var(--ya-border);
+  border-radius: 12px;
+  box-shadow: var(--ya-shadow);
 }
-.dsm-panel-flat {
-  background: var(--dsm-panel);
-  border-bottom: 1px solid var(--dsm-border);
-}
-.dsm-btn {
+
+/* ── КНОПКИ ────────────────────────────────── */
+.ya-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 6px 12px;
-  border-radius: 7px;
+  padding: 7px 14px;
+  border-radius: 8px;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.15s ease;
-  border: 1px solid var(--dsm-border);
-  background: var(--dsm-panel-alt);
-  color: var(--dsm-text);
-  white-space: nowrap;
+  transition: all 0.15s;
+  border: 1px solid var(--ya-border);
+  background: var(--ya-bg-muted);
+  color: var(--ya-text);
+  font-family: inherit;
 }
-.dsm-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
+.ya-btn:hover {
+  background: #e5e7eb;
 }
-.dsm-btn-blue {
-  background: var(--dsm-blue);
-  border-color: var(--dsm-blue);
-  color: #fff;
-}
-.dsm-btn-blue:hover {
-  opacity: 0.88;
+.ya-btn:active {
+  transform: scale(0.97);
 }
 
-.dsm-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+.ya-btn-orange {
+  background: var(--ya-orange);
+  border-color: var(--ya-orange);
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(255, 115, 0, 0.28);
+}
+.ya-btn-orange:hover {
+  background: var(--ya-orange-2);
+  border-color: var(--ya-orange-2);
+}
+.ya-btn-orange:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
-/* ─── NAV ─────────────────────────────────────── */
-.dsm-nav-item {
+/* ── НАВИГАЦИЯ ─────────────────────────────── */
+.ya-nav-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
+  gap: 9px;
+  padding: 8px 10px;
   border-radius: 8px;
   font-size: 13.5px;
   font-weight: 500;
-  color: var(--dsm-muted);
+  color: var(--ya-text-sec);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.15s;
   width: 100%;
   text-align: left;
   border: 1px solid transparent;
+  background: none;
+  font-family: inherit;
 }
-.dsm-nav-item:hover {
-  background: var(--dsm-white-20);
-  color: var(--dsm-text);
+.ya-nav-item:hover {
+  background: var(--ya-bg-muted);
+  color: var(--ya-text);
 }
-.dsm-nav-item.active {
-  background: var(--dsm-blue-glow);
-  border-color: rgba(59, 130, 246, 0.25);
-  color: var(--dsm-blue);
-}
-
-/* ─── MAP MARKERS ─────────────────────────────── */
-.dsm-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 2px solid currentColor;
-  background: rgba(0, 0, 0, 0.4);
-}
-.dsm-dot-pulse::after {
-  content: "";
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  border: 1.5px solid currentColor;
-  opacity: 0.4;
-  animation: dsm-pulse 2.5s ease-in-out infinite;
-}
-@keyframes dsm-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0.4;
-  }
-  50% {
-    transform: scale(1.5);
-    opacity: 0;
-  }
+.ya-nav-item.active {
+  background: var(--ya-orange-soft);
+  border-color: rgba(255, 115, 0, 0.22);
+  color: var(--ya-orange);
 }
 
-/* ─── TOGGLE ──────────────────────────────────── */
-.dsm-toggle {
+/* ── TOGGLE ────────────────────────────────── */
+.ya-toggle {
   position: relative;
-  width: 34px;
-  height: 18px;
-  border-radius: 9px;
-  background: var(--dsm-border);
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  background: #d1d5db;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.2s;
   flex-shrink: 0;
+  border: none;
 }
-.dsm-toggle.on {
-  background: var(--dsm-blue);
+.ya-toggle.on {
+  background: var(--ya-orange);
 }
-.dsm-toggle::after {
+.ya-toggle::after {
   content: "";
   position: absolute;
   top: 2px;
   left: 2px;
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: #fff;
-  transition: transform 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
-.dsm-toggle.on::after {
+.ya-toggle.on::after {
   transform: translateX(16px);
 }
 
-/* ─── MAP OVERLAY ─────────────────────────────── */
-.dsm-map-vignette {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 400;
-  background: radial-gradient(
-    ellipse at center,
-    transparent 60%,
-    rgba(13, 15, 20, 0.5) 100%
-  );
-}
-
-/* ─── DIVIDER ─────────────────────────────────── */
-.dsm-divider {
-  height: 1px;
-  background: var(--dsm-border);
-  margin: 0 -16px;
-}
-
-/* ─── STAT CARD ───────────────────────────────── */
-.dsm-stat {
-  background: var(--dsm-panel-alt);
-  border: 1px solid var(--dsm-border);
-  border-radius: 8px;
-  padding: 12px 14px;
-}
-
-/* ─── CHIP ────────────────────────────────────── */
-.dsm-chip {
-  padding: 4px 10px;
+/* ── CHIP ──────────────────────────────────── */
+.ya-chip {
+  padding: 5px 12px;
   border-radius: 20px;
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 500;
   cursor: pointer;
-  border: 1px solid var(--dsm-border);
-  background: var(--dsm-panel-alt);
-  color: var(--dsm-muted);
+  border: 1px solid var(--ya-border);
+  background: var(--ya-bg-soft);
+  color: var(--ya-text-sec);
   transition: all 0.15s;
+  font-family: inherit;
 }
-.dsm-chip.active {
-  background: var(--dsm-blue-glow);
-  border-color: rgba(59, 130, 246, 0.4);
-  color: var(--dsm-blue);
+.ya-chip:hover {
+  border-color: #cbd5e1;
+  color: var(--ya-text);
+}
+.ya-chip.active {
+  background: var(--ya-orange-soft);
+  border-color: rgba(255, 115, 0, 0.35);
+  color: var(--ya-orange);
+  font-weight: 600;
 }
 
-/* ─── ANIMATIONS ──────────────────────────────── */
+/* ── РАЗДЕЛИТЕЛЬ ───────────────────────────── */
+.ya-divider {
+  height: 1px;
+  background: var(--ya-border-soft);
+}
+
+/* ── АНИМАЦИИ ──────────────────────────────── */
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -308,14 +255,40 @@
     opacity: 1;
   }
 }
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+@keyframes mpulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
 .anim-fadeup {
   animation: fadeUp 0.3s ease forwards;
 }
 .anim-fadein {
   animation: fadeIn 0.25s ease forwards;
 }
+.blink {
+  animation: blink 2s ease infinite;
+}
+.mpulse {
+  animation: mpulse 2.5s ease-in-out infinite;
+}
 
-/* stagger children */
 .stagger > * {
   opacity: 0;
   animation: fadeUp 0.3s ease forwards;
@@ -324,44 +297,29 @@
   animation-delay: 0.04s;
 }
 .stagger > *:nth-child(2) {
-  animation-delay: 0.08s;
+  animation-delay: 0.09s;
 }
 .stagger > *:nth-child(3) {
-  animation-delay: 0.12s;
+  animation-delay: 0.14s;
 }
 .stagger > *:nth-child(4) {
-  animation-delay: 0.16s;
+  animation-delay: 0.19s;
 }
 .stagger > *:nth-child(5) {
-  animation-delay: 0.2s;
-}
-.stagger > *:nth-child(6) {
   animation-delay: 0.24s;
 }
+.stagger > *:nth-child(6) {
+  animation-delay: 0.29s;
+}
 .stagger > *:nth-child(7) {
-  animation-delay: 0.28s;
+  animation-delay: 0.34s;
 }
 .stagger > *:nth-child(8) {
-  animation-delay: 0.32s;
+  animation-delay: 0.39s;
 }
 
-/* blink dot */
-@keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.25;
-  }
-}
-.blink {
-  animation: blink 1.8s ease infinite;
-}
-
-/* progress fill */
-.dsm-progress-fill {
+.ya-progress-fill {
   height: 100%;
   border-radius: 4px;
-  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
