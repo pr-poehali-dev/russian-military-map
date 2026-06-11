@@ -17,9 +17,8 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				rajdhani: ['Rajdhani', 'sans-serif'],
-				mono: ['IBM Plex Mono', 'monospace'],
-				oswald: ['Oswald', 'sans-serif'],
+				golos: ['Golos Text', 'system-ui', 'sans-serif'],
+				mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

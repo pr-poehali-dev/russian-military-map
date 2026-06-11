@@ -4,334 +4,364 @@
 
 @layer base {
   :root {
-    --background: 220 20% 6%;
-    --foreground: 120 40% 85%;
+    /* DeepState-inspired: тёмно-серый фон, синие акценты */
+    --background: 220 14% 10%;
+    --foreground: 220 10% 88%;
 
-    --card: 220 18% 9%;
-    --card-foreground: 120 30% 80%;
+    --card: 220 13% 13%;
+    --card-foreground: 220 10% 88%;
 
-    --popover: 220 18% 9%;
-    --popover-foreground: 120 30% 80%;
+    --popover: 220 13% 13%;
+    --popover-foreground: 220 10% 88%;
 
-    --primary: 120 60% 45%;
-    --primary-foreground: 220 20% 6%;
+    --primary: 210 85% 55%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 15% 14%;
-    --secondary-foreground: 120 30% 75%;
+    --secondary: 220 12% 17%;
+    --secondary-foreground: 220 10% 72%;
 
-    --muted: 220 15% 12%;
-    --muted-foreground: 220 10% 50%;
+    --muted: 220 12% 16%;
+    --muted-foreground: 220 8% 48%;
 
-    --accent: 30 100% 55%;
-    --accent-foreground: 220 20% 6%;
+    --accent: 210 85% 55%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 80% 50%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 15% 18%;
-    --input: 220 15% 14%;
-    --ring: 120 60% 45%;
+    --border: 220 12% 20%;
+    --input: 220 12% 17%;
+    --ring: 210 85% 55%;
+    --radius: 0.5rem;
 
-    --radius: 0.25rem;
-
-    --neon-green: #39ff8a;
-    --neon-orange: #ff6b1a;
-    --neon-red: #ff3b30;
-    --neon-blue: #00d4ff;
-    --dark-bg: #080d10;
-    --panel-bg: #0d1318;
-    --panel-border: #1e2d1e;
+    /* DSM palette */
+    --dsm-bg: #141519;
+    --dsm-panel: #1c1e24;
+    --dsm-panel-alt: #22252d;
+    --dsm-border: #2e3240;
+    --dsm-text: #e2e4ea;
+    --dsm-muted: #6b7280;
+    --dsm-blue: #3b82f6;
+    --dsm-blue-dim: #1d4ed8;
+    --dsm-blue-glow: rgba(59, 130, 246, 0.15);
+    --dsm-red: #ef4444;
+    --dsm-red-dim: rgba(239, 68, 68, 0.15);
+    --dsm-orange: #f97316;
+    --dsm-yellow: #eab308;
+    --dsm-green: #22c55e;
+    --dsm-teal: #14b8a6;
+    --dsm-purple: #8b5cf6;
+    --dsm-white-20: rgba(255, 255, 255, 0.07);
+    --dsm-white-10: rgba(255, 255, 255, 0.04);
   }
 }
 
 @layer base {
   * {
     @apply border-border;
+    box-sizing: border-box;
   }
-
   body {
-    @apply bg-background text-foreground;
-    font-family: "Rajdhani", sans-serif;
-    background-color: var(--dark-bg);
+    background: var(--dsm-bg);
+    color: var(--dsm-text);
+    font-family: "Golos Text", system-ui, sans-serif;
     overflow: hidden;
   }
-
   ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+    width: 3px;
+    height: 3px;
   }
   ::-webkit-scrollbar-track {
-    background: #0d1318;
+    background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--neon-green);
+    background: var(--dsm-border);
     border-radius: 2px;
   }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--dsm-muted);
+  }
 }
 
-/* Leaflet overrides */
+/* ─── LEAFLET ─────────────────────────────────── */
 .leaflet-container {
-  background: #0a0f12 !important;
-  font-family: "IBM Plex Mono", monospace;
+  background: #0d0f14 !important;
+  font-family: "Golos Text", sans-serif;
 }
-
 .leaflet-tile-pane {
-  filter: saturate(0.4) brightness(0.55) hue-rotate(100deg) !important;
+  filter: brightness(0.45) saturate(0.5) hue-rotate(195deg) contrast(1.05) !important;
 }
-
-.leaflet-control-zoom {
-  display: none;
-}
-
+.leaflet-control-zoom,
 .leaflet-control-attribution {
-  background: rgba(8, 13, 16, 0.8) !important;
-  color: #39ff8a44 !important;
-  font-size: 9px !important;
-  border: none !important;
+  display: none !important;
+}
+.leaflet-popup-content-wrapper {
+  background: var(--dsm-panel) !important;
+  border: 1px solid var(--dsm-border) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+  padding: 0 !important;
+}
+.leaflet-popup-tip {
+  background: var(--dsm-panel) !important;
+}
+.leaflet-popup-content {
+  margin: 0 !important;
 }
 
-.leaflet-control-attribution a {
-  color: #39ff8a66 !important;
+/* ─── DSM COMPONENTS ──────────────────────────── */
+.dsm-panel {
+  background: var(--dsm-panel);
+  border: 1px solid var(--dsm-border);
+  border-radius: 10px;
+}
+.dsm-panel-flat {
+  background: var(--dsm-panel);
+  border-bottom: 1px solid var(--dsm-border);
+}
+.dsm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid var(--dsm-border);
+  background: var(--dsm-panel-alt);
+  color: var(--dsm-text);
+  white-space: nowrap;
+}
+.dsm-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.dsm-btn-blue {
+  background: var(--dsm-blue);
+  border-color: var(--dsm-blue);
+  color: #fff;
+}
+.dsm-btn-blue:hover {
+  opacity: 0.88;
 }
 
-/* Custom map markers */
-.tactic-marker {
-  width: 12px;
-  height: 12px;
+.dsm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* ─── NAV ─────────────────────────────────────── */
+.dsm-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--dsm-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent;
+}
+.dsm-nav-item:hover {
+  background: var(--dsm-white-20);
+  color: var(--dsm-text);
+}
+.dsm-nav-item.active {
+  background: var(--dsm-blue-glow);
+  border-color: rgba(59, 130, 246, 0.25);
+  color: var(--dsm-blue);
+}
+
+/* ─── MAP MARKERS ─────────────────────────────── */
+.dsm-dot {
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  border: 2px solid;
-  box-shadow: 0 0 8px currentColor;
-  animation: pulse-marker 2s infinite;
+  border: 2px solid currentColor;
+  background: rgba(0, 0, 0, 0.4);
 }
-
-.tactic-marker.friendly {
-  color: var(--neon-green);
-  background: #39ff8a44;
-  border-color: var(--neon-green);
-}
-.tactic-marker.enemy {
-  color: var(--neon-red);
-  background: #ff3b3044;
-  border-color: var(--neon-red);
-}
-.tactic-marker.neutral {
-  color: var(--neon-orange);
-  background: #ff6b1a44;
-  border-color: var(--neon-orange);
-}
-.tactic-marker.intel {
-  color: var(--neon-blue);
-  background: #00d4ff44;
-  border-color: var(--neon-blue);
-}
-
-@keyframes pulse-marker {
-  0%,
-  100% {
-    box-shadow: 0 0 6px currentColor;
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 14px currentColor;
-    transform: scale(1.1);
-  }
-}
-
-/* Panel styles */
-.panel-glass {
-  background: rgba(13, 19, 24, 0.95);
-  border: 1px solid var(--panel-border);
-  backdrop-filter: blur(12px);
-}
-
-.neon-border {
-  border: 1px solid rgba(57, 255, 138, 0.25);
-  box-shadow:
-    inset 0 0 20px rgba(57, 255, 138, 0.03),
-    0 0 1px rgba(57, 255, 138, 0.4);
-}
-
-.neon-border-orange {
-  border: 1px solid rgba(255, 107, 26, 0.35);
-  box-shadow: 0 0 1px rgba(255, 107, 26, 0.5);
-}
-
-.glow-text {
-  text-shadow:
-    0 0 12px var(--neon-green),
-    0 0 24px rgba(57, 255, 138, 0.3);
-}
-
-.glow-text-orange {
-  text-shadow: 0 0 8px var(--neon-orange);
-}
-
-/* Scan line effect */
-.scanlines::before {
+.dsm-dot-pulse::after {
   content: "";
   position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.08) 2px,
-    rgba(0, 0, 0, 0.08) 4px
-  );
-  pointer-events: none;
-  z-index: 10;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  opacity: 0.4;
+  animation: dsm-pulse 2.5s ease-in-out infinite;
+}
+@keyframes dsm-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
 }
 
-/* Animations */
-@keyframes fade-in {
+/* ─── TOGGLE ──────────────────────────────────── */
+.dsm-toggle {
+  position: relative;
+  width: 34px;
+  height: 18px;
+  border-radius: 9px;
+  background: var(--dsm-border);
+  cursor: pointer;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+.dsm-toggle.on {
+  background: var(--dsm-blue);
+}
+.dsm-toggle::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+.dsm-toggle.on::after {
+  transform: translateX(16px);
+}
+
+/* ─── MAP OVERLAY ─────────────────────────────── */
+.dsm-map-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 400;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 60%,
+    rgba(13, 15, 20, 0.5) 100%
+  );
+}
+
+/* ─── DIVIDER ─────────────────────────────────── */
+.dsm-divider {
+  height: 1px;
+  background: var(--dsm-border);
+  margin: 0 -16px;
+}
+
+/* ─── STAT CARD ───────────────────────────────── */
+.dsm-stat {
+  background: var(--dsm-panel-alt);
+  border: 1px solid var(--dsm-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+/* ─── CHIP ────────────────────────────────────── */
+.dsm-chip {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--dsm-border);
+  background: var(--dsm-panel-alt);
+  color: var(--dsm-muted);
+  transition: all 0.15s;
+}
+.dsm-chip.active {
+  background: var(--dsm-blue-glow);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: var(--dsm-blue);
+}
+
+/* ─── ANIMATIONS ──────────────────────────────── */
+@keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
-
-@keyframes slide-in-left {
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateX(-20px);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
   }
 }
-
-@keyframes slide-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.anim-fadeup {
+  animation: fadeUp 0.3s ease forwards;
+}
+.anim-fadein {
+  animation: fadeIn 0.25s ease forwards;
 }
 
+/* stagger children */
+.stagger > * {
+  opacity: 0;
+  animation: fadeUp 0.3s ease forwards;
+}
+.stagger > *:nth-child(1) {
+  animation-delay: 0.04s;
+}
+.stagger > *:nth-child(2) {
+  animation-delay: 0.08s;
+}
+.stagger > *:nth-child(3) {
+  animation-delay: 0.12s;
+}
+.stagger > *:nth-child(4) {
+  animation-delay: 0.16s;
+}
+.stagger > *:nth-child(5) {
+  animation-delay: 0.2s;
+}
+.stagger > *:nth-child(6) {
+  animation-delay: 0.24s;
+}
+.stagger > *:nth-child(7) {
+  animation-delay: 0.28s;
+}
+.stagger > *:nth-child(8) {
+  animation-delay: 0.32s;
+}
+
+/* blink dot */
 @keyframes blink {
   0%,
   100% {
     opacity: 1;
   }
   50% {
-    opacity: 0.3;
+    opacity: 0.25;
   }
 }
-
-@keyframes progress-bar {
-  from {
-    width: 0%;
-  }
-  to {
-    width: var(--target-width);
-  }
+.blink {
+  animation: blink 1.8s ease infinite;
 }
 
-.animate-fade-in {
-  animation: fade-in 0.4s ease forwards;
-}
-.animate-slide-left {
-  animation: slide-in-left 0.3s ease forwards;
-}
-.animate-slide-right {
-  animation: slide-in-right 0.3s ease forwards;
-}
-.animate-blink {
-  animation: blink 1.5s infinite;
-}
-
-/* Nav active state */
-.nav-item-active {
-  background: rgba(57, 255, 138, 0.1);
-  color: var(--neon-green) !important;
-  border-left: 2px solid var(--neon-green);
-}
-
-.nav-item {
-  transition: all 0.2s ease;
-  border-left: 2px solid transparent;
-}
-
-.nav-item:hover {
-  background: rgba(57, 255, 138, 0.06);
-  border-left-color: rgba(57, 255, 138, 0.4);
-  color: #a0ffcc;
-}
-
-/* Status bar blip */
-.status-blip {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--neon-green);
-  box-shadow: 0 0 6px var(--neon-green);
-}
-.status-blip.red {
-  background: var(--neon-red);
-  box-shadow: 0 0 6px var(--neon-red);
-}
-.status-blip.orange {
-  background: var(--neon-orange);
-  box-shadow: 0 0 6px var(--neon-orange);
-}
-
-/* Chart bar */
-.chart-bar {
-  transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Toggle switch */
-.toggle-layer {
-  width: 32px;
-  height: 16px;
-  border-radius: 8px;
-  background: rgba(57, 255, 138, 0.15);
-  border: 1px solid rgba(57, 255, 138, 0.3);
-  cursor: pointer;
-  position: relative;
-  transition: all 0.2s ease;
-}
-
-.toggle-layer.active {
-  background: rgba(57, 255, 138, 0.3);
-  border-color: var(--neon-green);
-  box-shadow: 0 0 8px rgba(57, 255, 138, 0.4);
-}
-
-.toggle-layer::after {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(57, 255, 138, 0.5);
-  transition: all 0.2s ease;
-}
-
-.toggle-layer.active::after {
-  left: 18px;
-  background: var(--neon-green);
-  box-shadow: 0 0 6px var(--neon-green);
-}
-
-/* Map grid overlay */
-.map-grid-overlay {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 500;
-  background-image:
-    linear-gradient(rgba(57, 255, 138, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(57, 255, 138, 0.04) 1px, transparent 1px);
-  background-size: 80px 80px;
+/* progress fill */
+.dsm-progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }

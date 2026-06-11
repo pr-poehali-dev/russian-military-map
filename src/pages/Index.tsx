@@ -3,275 +3,297 @@ import Icon from '@/components/ui/icon';
 
 type Tab = 'map' | 'analytics' | 'layers' | 'filters' | 'export' | 'help';
 
-const NAV_ITEMS: { id: Tab; label: string; icon: string }[] = [
-  { id: 'map',       label: 'Карта',      icon: 'Map' },
-  { id: 'analytics', label: 'Аналитика',  icon: 'BarChart3' },
-  { id: 'layers',    label: 'Слои',       icon: 'Layers' },
-  { id: 'filters',   label: 'Фильтры',    icon: 'SlidersHorizontal' },
-  { id: 'export',    label: 'Экспорт',    icon: 'Download' },
-  { id: 'help',      label: 'Справка',    icon: 'HelpCircle' },
-];
-
-const STATS = [
-  { label: 'Объектов', value: '2 841', delta: '+14', color: 'var(--neon-green)' },
-  { label: 'Активных', value: '384',   delta: '+3',  color: 'var(--neon-orange)' },
-  { label: 'Угроз',    value: '127',   delta: '-5',  color: 'var(--neon-red)' },
-  { label: 'Секторов', value: '48',    delta: '0',   color: 'var(--neon-blue)' },
+const NAV: { id: Tab; label: string; icon: string }[] = [
+  { id: 'map',       label: 'Карта',      icon: 'Map'              },
+  { id: 'analytics', label: 'Аналитика',  icon: 'BarChart3'        },
+  { id: 'layers',    label: 'Слои',       icon: 'Layers'           },
+  { id: 'filters',   label: 'Фильтры',    icon: 'SlidersHorizontal'},
+  { id: 'export',    label: 'Экспорт',    icon: 'Download'         },
+  { id: 'help',      label: 'Справка',    icon: 'HelpCircle'       },
 ];
 
 const MARKERS = [
-  { lat: 51.5, lng: 31.2, type: 'friendly', label: 'Позиция А-7' },
-  { lat: 50.8, lng: 33.6, type: 'enemy',    label: 'Объект X-3'  },
-  { lat: 52.1, lng: 30.0, type: 'intel',    label: 'Разведка-11' },
-  { lat: 49.5, lng: 36.1, type: 'enemy',    label: 'Группа В-2'  },
-  { lat: 53.3, lng: 28.5, type: 'neutral',  label: 'Транзит-4'   },
-  { lat: 50.2, lng: 38.0, type: 'friendly', label: 'База Центр'  },
-  { lat: 48.9, lng: 34.7, type: 'intel',    label: 'Наблюд.-5'   },
-  { lat: 51.8, lng: 35.5, type: 'enemy',    label: 'Цель D-9'    },
+  { lat: 51.5,  lng: 31.2, type: 'friendly', label: 'Позиция А-7'  },
+  { lat: 50.8,  lng: 33.6, type: 'enemy',    label: 'Объект X-3'   },
+  { lat: 52.1,  lng: 30.0, type: 'intel',    label: 'Разведка-11'  },
+  { lat: 49.5,  lng: 36.1, type: 'enemy',    label: 'Группа В-2'   },
+  { lat: 53.3,  lng: 28.5, type: 'neutral',  label: 'Транзит-4'    },
+  { lat: 50.2,  lng: 38.0, type: 'friendly', label: 'База Центр'   },
+  { lat: 48.9,  lng: 34.7, type: 'intel',    label: 'Наблюд.-5'    },
+  { lat: 51.8,  lng: 35.5, type: 'enemy',    label: 'Цель D-9'     },
+  { lat: 47.6,  lng: 37.8, type: 'enemy',    label: 'Сектор Е-1'   },
+  { lat: 52.9,  lng: 36.2, type: 'friendly', label: 'КП Север'     },
 ];
+
+const MARKER_COLORS: Record<string, string> = {
+  friendly: '#22c55e',
+  enemy:    '#ef4444',
+  neutral:  '#f97316',
+  intel:    '#3b82f6',
+};
 
 const CHART_DATA = [
-  { month: 'Янв', friendly: 40, enemy: 28, intel: 15 },
-  { month: 'Фев', friendly: 55, enemy: 35, intel: 22 },
-  { month: 'Мар', friendly: 38, enemy: 42, intel: 18 },
-  { month: 'Апр', friendly: 62, enemy: 31, intel: 28 },
-  { month: 'Май', friendly: 71, enemy: 25, intel: 35 },
-  { month: 'Июн', friendly: 65, enemy: 39, intel: 30 },
+  { month: 'Янв', a: 40, b: 28, c: 15 },
+  { month: 'Фев', a: 55, b: 35, c: 22 },
+  { month: 'Мар', a: 38, b: 42, c: 18 },
+  { month: 'Апр', a: 62, b: 31, c: 28 },
+  { month: 'Май', a: 71, b: 25, c: 35 },
+  { month: 'Июн', a: 65, b: 39, c: 30 },
 ];
 
-const LAYERS_DATA = [
-  { id: 1, label: 'Тактические позиции',  icon: 'Shield',    color: 'var(--neon-green)',  active: true  },
-  { id: 2, label: 'Вражеские объекты',    icon: 'Target',    color: 'var(--neon-red)',    active: true  },
-  { id: 3, label: 'Разведданные',         icon: 'Eye',       color: 'var(--neon-blue)',   active: true  },
-  { id: 4, label: 'Транспортные узлы',    icon: 'Truck',     color: 'var(--neon-orange)', active: false },
-  { id: 5, label: 'Зоны контроля',        icon: 'MapPin',    color: '#a78bfa',            active: false },
-  { id: 6, label: 'Рельеф',              icon: 'Mountain',  color: '#60a5fa',            active: true  },
-  { id: 7, label: 'Инфраструктура',      icon: 'Building2', color: '#f472b6',            active: false },
-  { id: 8, label: 'Связь и сети',        icon: 'Radio',     color: '#34d399',            active: true  },
-];
-
-const FILTER_OPTIONS = [
-  { group: 'Временной диапазон', items: ['Последние 24ч', 'Последние 7 дней', 'Последние 30 дней', 'Произвольный'] },
-  { group: 'Тип объекта',        items: ['Все типы', 'Военные', 'Гражданские', 'Транспорт', 'Связь'] },
-  { group: 'Приоритет угрозы',   items: ['Любой', 'Критический', 'Высокий', 'Средний', 'Низкий'] },
-  { group: 'Статус',             items: ['Все', 'Активные', 'Неактивные', 'Под наблюдением'] },
+const LAYERS_LIST = [
+  { id: 1, label: 'Тактические позиции',  icon: 'Shield',    color: '#22c55e', on: true  },
+  { id: 2, label: 'Вражеские объекты',    icon: 'Target',    color: '#ef4444', on: true  },
+  { id: 3, label: 'Разведданные',         icon: 'Eye',       color: '#3b82f6', on: true  },
+  { id: 4, label: 'Транспортные узлы',    icon: 'Truck',     color: '#f97316', on: false },
+  { id: 5, label: 'Зоны контроля',        icon: 'MapPin',    color: '#8b5cf6', on: false },
+  { id: 6, label: 'Рельеф',              icon: 'Mountain',  color: '#60a5fa', on: true  },
+  { id: 7, label: 'Инфраструктура',      icon: 'Building2', color: '#f472b6', on: false },
+  { id: 8, label: 'Связь и сети',        icon: 'Radio',     color: '#14b8a6', on: true  },
 ];
 
 const EXPORT_FORMATS = [
-  { id: 'pdf',  label: 'PDF-отчёт',         desc: 'Полный отчёт с картой и статистикой', icon: 'FileText', color: 'var(--neon-red)'    },
-  { id: 'xlsx', label: 'Excel таблица',      desc: 'Данные XLSX для анализа',             icon: 'Table',    color: 'var(--neon-green)'  },
-  { id: 'kml',  label: 'KML / Google Earth', desc: 'Экспорт геоданных',                   icon: 'Globe',    color: 'var(--neon-blue)'   },
-  { id: 'json', label: 'JSON / API',         desc: 'Машиночитаемый формат',               icon: 'Code2',    color: '#a78bfa'             },
-  { id: 'png',  label: 'Снимок карты',       desc: 'PNG текущего вида карты',             icon: 'Image',    color: 'var(--neon-orange)' },
-  { id: 'gpx',  label: 'GPX маршруты',       desc: 'Экспорт маршрутов и путей',           icon: 'Route',    color: '#f472b6'             },
+  { id: 'pdf',  label: 'PDF-отчёт',         icon: 'FileText', color: '#ef4444' },
+  { id: 'xlsx', label: 'Excel таблица',      icon: 'Table2',   color: '#22c55e' },
+  { id: 'kml',  label: 'KML / Google Earth', icon: 'Globe',    color: '#3b82f6' },
+  { id: 'json', label: 'JSON / API',         icon: 'Code2',    color: '#8b5cf6' },
+  { id: 'png',  label: 'Снимок карты',       icon: 'Image',    color: '#f97316' },
+  { id: 'gpx',  label: 'GPX маршруты',       icon: 'Route',    color: '#14b8a6' },
+];
+
+const HELP_ITEMS = [
+  { q: 'Как добавить маркер?',        a: 'Правая кнопка мыши на карте → "Добавить объект". Укажите тип и координаты.' },
+  { q: 'Как включить/выключить слой?', a: 'Раздел "Слои" — переключайте тоглы рядом с каждым слоем.' },
+  { q: 'Как экспортировать данные?',   a: 'Раздел "Экспорт" — выберите формат и нажмите кнопку.' },
+  { q: 'Цвета маркеров?',             a: 'Зелёный — свои. Красный — противник. Синий — разведка. Оранжевый — нейтральные.' },
+  { q: 'Как сбросить фильтры?',       a: 'Кнопка "Сбросить" в верхнем правом углу раздела "Фильтры".' },
+  { q: 'Частота обновления?',         a: 'Данные обновляются каждые 5 минут. Индикатор LIVE — активное соединение.' },
 ];
 
 declare global {
-   
-  interface Window { L: unknown; }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  interface Window { L: any; }
 }
 
-function MapView() {
+/* ─── MAP ──────────────────────────────────────────────────────── */
+function MapPanel() {
   const mapRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mapInstanceRef = useRef<any>(null);
+  const mapInst = useRef<any>(null);
 
   useEffect(() => {
-    if (!mapRef.current || mapInstanceRef.current) return;
+    if (!mapRef.current || mapInst.current) return;
     const L = window.L;
     if (!L) return;
 
     const map = L.map(mapRef.current, {
-      center: [51.0, 33.0],
+      center: [50.5, 33.5],
       zoom: 6,
       zoomControl: false,
-      attributionControl: true,
+      attributionControl: false,
     });
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap',
-      maxZoom: 18,
-    }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
 
     MARKERS.forEach((m) => {
-      const colorMap: Record<string, string> = {
-        friendly: '#39ff8a',
-        enemy: '#ff3b30',
-        neutral: '#ff6b1a',
-        intel: '#00d4ff',
-      };
-      const color = colorMap[m.type] || '#fff';
+      const c = MARKER_COLORS[m.type] || '#fff';
+      const iconHtml = `
+        <div style="position:relative;width:12px;height:12px;">
+          <div style="
+            width:10px;height:10px;border-radius:50%;
+            border:2px solid ${c};
+            background:${c}30;
+            position:absolute;top:1px;left:1px;
+          "></div>
+          <div style="
+            position:absolute;inset:-5px;border-radius:50%;
+            border:1.5px solid ${c};opacity:0.3;
+            animation:dsm-pulse 2.5s ease-in-out infinite;
+          "></div>
+        </div>`;
+      const icon = L.divIcon({ className: '', html: iconHtml, iconSize: [12, 12], iconAnchor: [6, 6] });
 
-      const icon = L.divIcon({
-        className: '',
-        html: `<div class="tactic-marker ${m.type}" style="color:${color}"></div>`,
-        iconSize: [12, 12],
-        iconAnchor: [6, 6],
-      });
-
-      L.marker([m.lat, m.lng], { icon })
-        .addTo(map)
-        .bindPopup(
-          `<div style="background:#0d1318;border:1px solid ${color};padding:8px 12px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:${color};min-width:140px;">
-            <div style="font-weight:600;margin-bottom:4px;">${m.label}</div>
-            <div style="color:#666;font-size:10px;">Тип: ${m.type}</div>
-            <div style="color:#666;font-size:10px;">Статус: активен</div>
-          </div>`,
-          { className: 'tactic-popup' }
-        );
+      L.marker([m.lat, m.lng], { icon }).addTo(map).bindPopup(`
+        <div style="font-family:'Golos Text',sans-serif;padding:10px 14px;min-width:160px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <div style="width:8px;height:8px;border-radius:50%;background:${c};box-shadow:0 0 6px ${c};flex-shrink:0;"></div>
+            <strong style="color:var(--dsm-text);font-size:13px;">${m.label}</strong>
+          </div>
+          <div style="color:var(--dsm-muted);font-size:11px;line-height:1.6;">
+            Тип: ${m.type === 'friendly' ? 'Свои' : m.type === 'enemy' ? 'Противник' : m.type === 'intel' ? 'Разведка' : 'Нейтральный'}<br>
+            Координаты: ${m.lat.toFixed(3)}°N, ${m.lng.toFixed(3)}°E<br>
+            Статус: <span style="color:#22c55e;">Активен</span>
+          </div>
+        </div>
+      `, { className: '' });
     });
 
-    mapInstanceRef.current = map;
-    return () => {
-      map.remove();
-      mapInstanceRef.current = null;
-    };
+    mapInst.current = map;
+    return () => { map.remove(); mapInst.current = null; };
   }, []);
 
   return (
     <div className="relative w-full h-full">
       <div ref={mapRef} className="w-full h-full" />
-      <div className="map-grid-overlay scanlines" />
+      <div className="dsm-map-vignette" />
 
-      <div className="absolute top-3 right-3 z-[600] panel-glass neon-border px-3 py-2 font-mono text-xs"
-           style={{ color: 'var(--neon-green)' }}>
-        <div className="flex items-center gap-2 mb-1">
-          <div className="status-blip animate-blink" />
-          <span style={{ color: '#556677' }}>LIVE</span>
+      {/* Top-left chips */}
+      <div className="absolute top-3 left-3 z-[600] flex gap-2">
+        <div className="dsm-panel px-3 py-1.5 flex items-center gap-2" style={{ borderRadius: 8 }}>
+          <div className="blink" style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 6px #22c55e' }} />
+          <span style={{ fontSize: 12, color: 'var(--dsm-muted)' }}>ОНЛАЙН</span>
+          <span style={{ fontSize: 12, color: 'var(--dsm-text)', fontWeight: 600 }}>2 841</span>
+          <span style={{ fontSize: 12, color: 'var(--dsm-muted)' }}>объектов</span>
         </div>
-        <div>51°02′N  33°00′E</div>
-        <div style={{ color: '#556677' }}>Zoom: 6 | UTM 37U</div>
+        <div className="dsm-panel px-3 py-1.5 flex items-center gap-1.5" style={{ borderRadius: 8 }}>
+          <Icon name="MapPin" size={12} style={{ color: 'var(--dsm-muted)' }} />
+          <span style={{ fontSize: 12, color: 'var(--dsm-muted)' }}>Восточная Европа</span>
+        </div>
       </div>
 
-      <div className="absolute bottom-6 right-3 z-[600] flex flex-col gap-1">
-        {['+', '−'].map((s, i) => (
-          <button key={i}
-            onClick={() => { const m = mapInstanceRef.current; if (m) { if (i === 0) { m.zoomIn(); } else { m.zoomOut(); } } }}
-            className="w-8 h-8 panel-glass neon-border flex items-center justify-center font-oswald text-lg transition-all hover:bg-[rgba(57,255,138,0.15)]"
-            style={{ color: 'var(--neon-green)' }}>
-            {s}
+      {/* Zoom controls */}
+      <div className="absolute bottom-8 right-4 z-[600] flex flex-col gap-1">
+        {[{ icon: 'Plus', fn: () => mapInst.current?.zoomIn() }, { icon: 'Minus', fn: () => mapInst.current?.zoomOut() }].map((b) => (
+          <button key={b.icon}
+            onClick={b.fn}
+            className="dsm-btn"
+            style={{ width: 32, height: 32, padding: 0, borderRadius: 8 }}>
+            <Icon name={b.icon} size={14} />
           </button>
         ))}
       </div>
 
-      <div className="absolute bottom-6 left-3 z-[600] panel-glass neon-border px-3 py-2 font-mono text-xs space-y-1">
-        {[
-          { color: '#39ff8a', label: 'Свои позиции' },
-          { color: '#ff3b30', label: 'Противник'    },
-          { color: '#ff6b1a', label: 'Нейтральные'  },
-          { color: '#00d4ff', label: 'Разведка'     },
-        ].map((l) => (
-          <div key={l.label} className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full" style={{ background: l.color, boxShadow: `0 0 5px ${l.color}` }} />
-            <span style={{ color: '#889' }}>{l.label}</span>
-          </div>
-        ))}
+      {/* Legend */}
+      <div className="absolute bottom-8 left-3 z-[600] dsm-panel px-3 py-2.5" style={{ borderRadius: 10 }}>
+        <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--dsm-muted)', letterSpacing: '0.08em', marginBottom: 8 }}>
+          ОБОЗНАЧЕНИЯ
+        </div>
+        <div className="flex flex-col gap-1.5">
+          {[
+            { c: '#22c55e', l: 'Свои позиции'  },
+            { c: '#ef4444', l: 'Противник'      },
+            { c: '#f97316', l: 'Нейтральные'    },
+            { c: '#3b82f6', l: 'Разведка'       },
+          ].map((item) => (
+            <div key={item.l} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: item.c, boxShadow: `0 0 4px ${item.c}`, flexShrink: 0 }} />
+              <span style={{ fontSize: 11.5, color: 'var(--dsm-muted)' }}>{item.l}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Coords */}
+      <div className="absolute top-3 right-3 z-[600] dsm-panel px-3 py-2" style={{ borderRadius: 8 }}>
+        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'var(--dsm-muted)' }}>
+          50°30′N&nbsp;&nbsp;33°30′E
+        </div>
+        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: 'var(--dsm-border)', marginTop: 1 }}>
+          Zoom 6 · UTM 37U
+        </div>
       </div>
     </div>
   );
 }
 
-function AnalyticsView() {
-  const maxVal = 80;
+/* ─── ANALYTICS ────────────────────────────────────────────────── */
+function AnalyticsPanel() {
+  const maxV = 80;
+  const stats = [
+    { label: 'Всего объектов', value: '2 841', delta: '+14', up: true,  color: 'var(--dsm-blue)'   },
+    { label: 'Активных',       value: '384',   delta: '+3',  up: true,  color: 'var(--dsm-green)'  },
+    { label: 'Угроз',          value: '127',   delta: '-5',  up: false, color: 'var(--dsm-red)'    },
+    { label: 'Секторов',       value: '48',    delta: '0',   up: true,  color: 'var(--dsm-orange)' },
+  ];
   return (
-    <div className="h-full overflow-y-auto p-6 space-y-6 animate-fade-in">
-      <div className="flex items-center justify-between">
-        <h2 className="font-oswald text-2xl font-semibold tracking-wider glow-text" style={{ color: 'var(--neon-green)' }}>
-          АНАЛИТИКА
-        </h2>
-        <span className="font-mono text-xs px-2 py-1 rounded"
-          style={{ background: 'rgba(57,255,138,0.1)', color: 'var(--neon-green)' }}>
-          11.06.2026 06:42
+    <div className="h-full overflow-y-auto stagger" style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <h2 style={{ fontSize: 17, fontWeight: 700, color: 'var(--dsm-text)' }}>Аналитика</h2>
+        <span style={{ fontSize: 11, color: 'var(--dsm-muted)', fontFamily: "'JetBrains Mono',monospace" }}>
+          11.06.2026 · 06:42
         </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        {STATS.map((s) => (
-          <div key={s.label} className="panel-glass neon-border rounded p-4">
-            <div className="font-mono text-xs mb-1" style={{ color: '#556677' }}>{s.label}</div>
-            <div className="font-oswald text-3xl font-bold"
-              style={{ color: s.color, textShadow: `0 0 12px ${s.color}` }}>
-              {s.value}
-            </div>
-            <div className="font-mono text-xs mt-1"
-              style={{ color: s.delta.startsWith('-') ? 'var(--neon-red)' : 'var(--neon-green)' }}>
+      {/* Stats grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+        {stats.map((s) => (
+          <div key={s.label} className="dsm-stat">
+            <div style={{ fontSize: 11, color: 'var(--dsm-muted)', marginBottom: 6 }}>{s.label}</div>
+            <div style={{ fontSize: 26, fontWeight: 700, color: s.color, lineHeight: 1 }}>{s.value}</div>
+            <div style={{ fontSize: 11, marginTop: 5, color: s.up ? 'var(--dsm-green)' : 'var(--dsm-red)', display: 'flex', alignItems: 'center', gap: 3 }}>
+              <Icon name={s.up ? 'TrendingUp' : 'TrendingDown'} size={11} />
               {s.delta} за 24ч
             </div>
           </div>
         ))}
       </div>
 
-      <div className="panel-glass neon-border rounded p-4">
-        <div className="font-rajdhani text-sm font-semibold mb-4 tracking-wider" style={{ color: '#aabbcc' }}>
+      {/* Bar chart */}
+      <div className="dsm-panel" style={{ padding: 16, borderRadius: 10 }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--dsm-muted)', letterSpacing: '0.06em', marginBottom: 14 }}>
           АКТИВНОСТЬ ПО МЕСЯЦАМ
         </div>
-        <div className="flex items-end gap-2 h-32">
-          {CHART_DATA.map((d, i) => (
-            <div key={d.month} className="flex-1 flex flex-col items-center gap-1">
-              <div className="w-full flex gap-[2px] items-end" style={{ height: '100px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: 96 }}>
+          {CHART_DATA.map((d) => (
+            <div key={d.month} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+              <div style={{ width: '100%', display: 'flex', gap: 2, alignItems: 'flex-end', height: 80 }}>
                 {[
-                  { val: d.friendly, color: 'var(--neon-green)' },
-                  { val: d.enemy,    color: 'var(--neon-red)'   },
-                  { val: d.intel,    color: 'var(--neon-blue)'  },
+                  { val: d.a, color: 'var(--dsm-green)' },
+                  { val: d.b, color: 'var(--dsm-red)'   },
+                  { val: d.c, color: 'var(--dsm-blue)'  },
                 ].map((bar, j) => (
-                  <div key={j} className="flex-1 rounded-sm chart-bar"
-                    style={{
-                      height: `${(bar.val / maxVal) * 100}px`,
-                      background: bar.color,
-                      opacity: 0.85,
-                      boxShadow: `0 0 4px ${bar.color}`,
-                    }} />
+                  <div key={j} style={{
+                    flex: 1, borderRadius: 3,
+                    height: `${(bar.val / maxV) * 80}px`,
+                    background: bar.color, opacity: 0.8,
+                  }} />
                 ))}
               </div>
-              <span className="font-mono text-[9px]" style={{ color: '#556677' }}>{d.month}</span>
+              <span style={{ fontSize: 10, color: 'var(--dsm-muted)' }}>{d.month}</span>
             </div>
           ))}
         </div>
-        <div className="flex gap-4 mt-3">
-          {[
-            { label: 'Свои',     color: 'var(--neon-green)' },
-            { label: 'Против.',  color: 'var(--neon-red)'   },
-            { label: 'Разведка', color: 'var(--neon-blue)'  },
-          ].map((l) => (
-            <div key={l.label} className="flex items-center gap-1">
-              <div className="w-2 h-2" style={{ background: l.color }} />
-              <span className="font-mono text-[10px]" style={{ color: '#556677' }}>{l.label}</span>
+        <div style={{ display: 'flex', gap: 14, marginTop: 10 }}>
+          {[['Свои', 'var(--dsm-green)'], ['Против.', 'var(--dsm-red)'], ['Развед.', 'var(--dsm-blue)']].map(([l, c]) => (
+            <div key={l} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+              <div style={{ width: 8, height: 8, borderRadius: 2, background: c }} />
+              <span style={{ fontSize: 11, color: 'var(--dsm-muted)' }}>{l}</span>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="panel-glass neon-border rounded p-4">
-        <div className="font-rajdhani text-sm font-semibold mb-4 tracking-wider" style={{ color: '#aabbcc' }}>
+      {/* Donut */}
+      <div className="dsm-panel" style={{ padding: 16, borderRadius: 10 }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--dsm-muted)', letterSpacing: '0.06em', marginBottom: 14 }}>
           РАСПРЕДЕЛЕНИЕ УГРОЗ
         </div>
-        <div className="flex gap-4 items-center">
-          <div className="relative w-24 h-24 flex-shrink-0">
-            <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
-              <circle cx="18" cy="18" r="15" fill="none" stroke="#1e2d1e" strokeWidth="3" />
-              <circle cx="18" cy="18" r="15" fill="none" stroke="var(--neon-red)" strokeWidth="3"
-                strokeDasharray="40 60" strokeLinecap="round" />
-              <circle cx="18" cy="18" r="15" fill="none" stroke="var(--neon-orange)" strokeWidth="3"
-                strokeDasharray="25 75" strokeDashoffset="-40" strokeLinecap="round" />
-              <circle cx="18" cy="18" r="15" fill="none" stroke="var(--neon-green)" strokeWidth="3"
-                strokeDasharray="22 78" strokeDashoffset="-65" strokeLinecap="round" />
-              <circle cx="18" cy="18" r="15" fill="none" stroke="var(--neon-blue)" strokeWidth="3"
-                strokeDasharray="13 87" strokeDashoffset="-87" strokeLinecap="round" />
-            </svg>
-          </div>
-          <div className="space-y-2 flex-1">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <svg viewBox="0 0 36 36" style={{ width: 88, height: 88, flexShrink: 0, transform: 'rotate(-90deg)' }}>
+            <circle cx="18" cy="18" r="14" fill="none" stroke="var(--dsm-border)" strokeWidth="3.5" />
+            <circle cx="18" cy="18" r="14" fill="none" stroke="var(--dsm-red)" strokeWidth="3.5"
+              strokeDasharray="38 62" strokeLinecap="round" />
+            <circle cx="18" cy="18" r="14" fill="none" stroke="var(--dsm-orange)" strokeWidth="3.5"
+              strokeDasharray="24 76" strokeDashoffset="-38" strokeLinecap="round" />
+            <circle cx="18" cy="18" r="14" fill="none" stroke="var(--dsm-yellow)" strokeWidth="3.5"
+              strokeDasharray="23 77" strokeDashoffset="-62" strokeLinecap="round" />
+            <circle cx="18" cy="18" r="14" fill="none" stroke="var(--dsm-blue)" strokeWidth="3.5"
+              strokeDasharray="15 85" strokeDashoffset="-85" strokeLinecap="round" />
+          </svg>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
             {[
-              { label: 'Критические', pct: '40%', color: 'var(--neon-red)'    },
-              { label: 'Высокие',     pct: '25%', color: 'var(--neon-orange)' },
-              { label: 'Средние',     pct: '22%', color: 'var(--neon-green)'  },
-              { label: 'Низкие',      pct: '13%', color: 'var(--neon-blue)'   },
+              { l: 'Критические', p: '38%', c: 'var(--dsm-red)'    },
+              { l: 'Высокие',     p: '24%', c: 'var(--dsm-orange)' },
+              { l: 'Средние',     p: '23%', c: 'var(--dsm-yellow)' },
+              { l: 'Низкие',      p: '15%', c: 'var(--dsm-blue)'   },
             ].map((t) => (
-              <div key={t.label} className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-sm" style={{ background: t.color }} />
-                  <span className="font-mono text-xs" style={{ color: '#889' }}>{t.label}</span>
+              <div key={t.l} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                  <div style={{ width: 8, height: 8, borderRadius: 2, background: t.c, flexShrink: 0 }} />
+                  <span style={{ fontSize: 12, color: 'var(--dsm-muted)' }}>{t.l}</span>
                 </div>
-                <span className="font-mono text-xs font-semibold" style={{ color: t.color }}>{t.pct}</span>
+                <span style={{ fontSize: 12, fontWeight: 600, color: t.c }}>{t.p}</span>
               </div>
             ))}
           </div>
@@ -281,95 +303,103 @@ function AnalyticsView() {
   );
 }
 
-function LayersView() {
-  const [layers, setLayers] = useState(LAYERS_DATA);
-
-  const toggle = (id: number) =>
-    setLayers((prev) => prev.map((l) => (l.id === id ? { ...l, active: !l.active } : l)));
+/* ─── LAYERS ───────────────────────────────────────────────────── */
+function LayersPanel() {
+  const [layers, setLayers] = useState(LAYERS_LIST);
+  const [basemap, setBasemap] = useState(0);
+  const toggleLayer = (id: number) =>
+    setLayers((p) => p.map((l) => (l.id === id ? { ...l, on: !l.on } : l)));
 
   return (
-    <div className="h-full overflow-y-auto p-6 space-y-6 animate-fade-in">
-      <div className="flex items-center justify-between">
-        <h2 className="font-oswald text-2xl font-semibold tracking-wider glow-text" style={{ color: 'var(--neon-green)' }}>
-          СЛОИ КАРТЫ
-        </h2>
-        <button
-          className="font-mono text-xs px-3 py-1 rounded transition-all hover:opacity-80"
-          style={{ background: 'rgba(57,255,138,0.1)', color: 'var(--neon-green)', border: '1px solid rgba(57,255,138,0.3)' }}
-          onClick={() => setLayers((p) => p.map((l) => ({ ...l, active: true })))}>
+    <div className="h-full overflow-y-auto" style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <h2 style={{ fontSize: 17, fontWeight: 700, color: 'var(--dsm-text)' }}>Слои</h2>
+        <button className="dsm-btn" style={{ fontSize: 12 }}
+          onClick={() => setLayers((p) => p.map((l) => ({ ...l, on: true })))}>
           Включить все
         </button>
       </div>
 
-      <div className="space-y-2">
-        {layers.map((layer) => (
-          <div key={layer.id}
-            className="panel-glass rounded p-3 flex items-center justify-between cursor-pointer transition-all hover:bg-[rgba(57,255,138,0.04)]"
-            style={{ borderLeft: `3px solid ${layer.active ? layer.color : '#1e2d1e'}`, borderTop: '1px solid #1e2d1e', borderRight: '1px solid #1e2d1e', borderBottom: '1px solid #1e2d1e' }}
-            onClick={() => toggle(layer.id)}>
-            <div className="flex items-center gap-3">
-              <Icon name={layer.icon} size={16} style={{ color: layer.active ? layer.color : '#445' }} />
-              <span className="font-rajdhani text-sm font-medium" style={{ color: layer.active ? '#ccd' : '#556' }}>
-                {layer.label}
-              </span>
+      {/* Layers list */}
+      <div className="dsm-panel" style={{ borderRadius: 10, overflow: 'hidden' }}>
+        {layers.map((layer, i) => (
+          <div key={layer.id}>
+            {i > 0 && <div className="dsm-divider" />}
+            <div
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', cursor: 'pointer', transition: 'background 0.15s' }}
+              onClick={() => toggleLayer(layer.id)}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--dsm-white-10)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <Icon name={layer.icon} size={15} style={{ color: layer.on ? layer.color : 'var(--dsm-muted)', flexShrink: 0 }} />
+                <span style={{ fontSize: 13.5, color: layer.on ? 'var(--dsm-text)' : 'var(--dsm-muted)', fontWeight: 500 }}>
+                  {layer.label}
+                </span>
+              </div>
+              <div className={`dsm-toggle ${layer.on ? 'on' : ''}`}
+                style={layer.on ? { background: layer.color } : {}} />
             </div>
-            <div className={`toggle-layer ${layer.active ? 'active' : ''}`}
-              style={layer.active ? { borderColor: layer.color, background: `${layer.color}22`, boxShadow: `0 0 8px ${layer.color}44` } : {}}
-            />
           </div>
         ))}
       </div>
 
-      <div className="panel-glass neon-border rounded p-4 space-y-3">
-        <div className="font-rajdhani text-sm font-semibold tracking-wider" style={{ color: '#aabbcc' }}>ПОДЛОЖКА КАРТЫ</div>
-        {['OpenStreetMap', 'Спутник', 'Рельеф', 'Тёмная тема'].map((name, i) => (
-          <label key={name} className="flex items-center gap-3 cursor-pointer">
-            <div className="w-3 h-3 rounded-full border flex items-center justify-center"
-              style={{ borderColor: i === 0 ? 'var(--neon-green)' : '#334' }}>
-              {i === 0 && <div className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--neon-green)' }} />}
+      {/* Basemap */}
+      <div className="dsm-panel" style={{ borderRadius: 10, overflow: 'hidden' }}>
+        <div style={{ padding: '10px 14px 4px', fontSize: 11, fontWeight: 600, color: 'var(--dsm-muted)', letterSpacing: '0.07em' }}>
+          ПОДЛОЖКА
+        </div>
+        {['OpenStreetMap', 'Спутник', 'Рельеф', 'Тёмная'].map((name, i) => (
+          <div key={name}>
+            {i > 0 && <div className="dsm-divider" />}
+            <div
+              style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 14px', cursor: 'pointer', transition: 'background 0.15s' }}
+              onClick={() => setBasemap(i)}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--dsm-white-10)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}>
+              <div style={{ width: 14, height: 14, borderRadius: '50%', border: `2px solid ${basemap === i ? 'var(--dsm-blue)' : 'var(--dsm-border)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                {basemap === i && <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--dsm-blue)' }} />}
+              </div>
+              <span style={{ fontSize: 13, color: basemap === i ? 'var(--dsm-text)' : 'var(--dsm-muted)' }}>{name}</span>
+              {basemap === i && <div className="dsm-badge" style={{ marginLeft: 'auto', background: 'var(--dsm-blue-glow)', color: 'var(--dsm-blue)', fontSize: 10 }}>Активна</div>}
             </div>
-            <span className="font-mono text-xs" style={{ color: i === 0 ? 'var(--neon-green)' : '#556677' }}>{name}</span>
-          </label>
+          </div>
         ))}
       </div>
     </div>
   );
 }
 
-function FiltersView() {
-  const [selected, setSelected] = useState(FILTER_OPTIONS.map(() => 0));
-  const [range, setRange] = useState(65);
+/* ─── FILTERS ──────────────────────────────────────────────────── */
+function FiltersPanel() {
+  const groups = [
+    { label: 'Период',         items: ['24 часа', '7 дней', '30 дней', 'Всё время'] },
+    { label: 'Тип объекта',    items: ['Все', 'Военные', 'Гражданские', 'Транспорт'] },
+    { label: 'Приоритет',      items: ['Любой', 'Критический', 'Высокий', 'Средний', 'Низкий'] },
+    { label: 'Статус',         items: ['Все', 'Активные', 'Неактивные'] },
+  ];
+  const [sel, setSel] = useState(groups.map(() => 0));
+  const [radius, setRadius] = useState(65);
 
   return (
-    <div className="h-full overflow-y-auto p-6 space-y-6 animate-fade-in">
-      <div className="flex items-center justify-between">
-        <h2 className="font-oswald text-2xl font-semibold tracking-wider glow-text" style={{ color: 'var(--neon-green)' }}>
-          ФИЛЬТРЫ
-        </h2>
-        <button
-          className="font-mono text-xs px-3 py-1 rounded transition-all"
-          style={{ background: 'rgba(255,59,48,0.1)', color: 'var(--neon-red)', border: '1px solid rgba(255,59,48,0.3)' }}
-          onClick={() => setSelected(FILTER_OPTIONS.map(() => 0))}>
+    <div className="h-full overflow-y-auto" style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <h2 style={{ fontSize: 17, fontWeight: 700, color: 'var(--dsm-text)' }}>Фильтры</h2>
+        <button className="dsm-btn" style={{ fontSize: 12, color: 'var(--dsm-red)', borderColor: 'rgba(239,68,68,0.25)' }}
+          onClick={() => setSel(groups.map(() => 0))}>
           Сбросить
         </button>
       </div>
 
-      {FILTER_OPTIONS.map((group, gi) => (
-        <div key={group.group} className="panel-glass neon-border rounded p-4 space-y-3">
-          <div className="font-rajdhani text-sm font-semibold tracking-wider" style={{ color: '#aabbcc' }}>
-            {group.group.toUpperCase()}
+      {groups.map((g, gi) => (
+        <div key={g.label} className="dsm-panel" style={{ borderRadius: 10, padding: '12px 14px' }}>
+          <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--dsm-muted)', letterSpacing: '0.07em', marginBottom: 10 }}>
+            {g.label.toUpperCase()}
           </div>
-          <div className="flex flex-wrap gap-2">
-            {group.items.map((item, ii) => (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+            {g.items.map((item, ii) => (
               <button key={item}
-                className="font-mono text-xs px-3 py-1.5 rounded transition-all"
-                style={{
-                  background: selected[gi] === ii ? 'rgba(57,255,138,0.15)' : 'rgba(30,45,30,0.5)',
-                  color:      selected[gi] === ii ? 'var(--neon-green)' : '#556677',
-                  border:     `1px solid ${selected[gi] === ii ? 'rgba(57,255,138,0.4)' : '#1e2d1e'}`,
-                  boxShadow:  selected[gi] === ii ? '0 0 8px rgba(57,255,138,0.2)' : 'none',
-                }}
-                onClick={() => setSelected((prev) => prev.map((v, i) => (i === gi ? ii : v)))}>
+                className={`dsm-chip ${sel[gi] === ii ? 'active' : ''}`}
+                onClick={() => setSel((p) => p.map((v, i) => (i === gi ? ii : v)))}>
                 {item}
               </button>
             ))}
@@ -377,176 +407,171 @@ function FiltersView() {
         </div>
       ))}
 
-      <div className="panel-glass neon-border rounded p-4 space-y-3">
-        <div className="font-rajdhani text-sm font-semibold tracking-wider flex justify-between" style={{ color: '#aabbcc' }}>
-          <span>РАДИУС ПОИСКА</span>
-          <span style={{ color: 'var(--neon-green)' }}>{range} км</span>
+      {/* Radius slider */}
+      <div className="dsm-panel" style={{ borderRadius: 10, padding: '12px 14px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--dsm-muted)', letterSpacing: '0.07em' }}>РАДИУС</span>
+          <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--dsm-blue)' }}>{radius} км</span>
         </div>
-        <input type="range" min={5} max={500} value={range}
-          onChange={(e) => setRange(Number(e.target.value))}
-          className="w-full h-1 rounded appearance-none cursor-pointer"
-          style={{ accentColor: 'var(--neon-green)' }}
-        />
-        <div className="flex justify-between font-mono text-[9px]" style={{ color: '#445566' }}>
-          <span>5 км</span><span>500 км</span>
+        <input type="range" min={5} max={500} value={radius} onChange={(e) => setRadius(+e.target.value)}
+          style={{ width: '100%', accentColor: 'var(--dsm-blue)', cursor: 'pointer' }} />
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
+          <span style={{ fontSize: 10, color: 'var(--dsm-border)' }}>5 км</span>
+          <span style={{ fontSize: 10, color: 'var(--dsm-border)' }}>500 км</span>
         </div>
       </div>
 
-      <button className="w-full py-3 font-oswald text-sm font-semibold tracking-widest rounded transition-all hover:brightness-110"
-        style={{ background: 'rgba(57,255,138,0.15)', color: 'var(--neon-green)', border: '1px solid rgba(57,255,138,0.4)', boxShadow: '0 0 16px rgba(57,255,138,0.1)' }}>
-        ПРИМЕНИТЬ ФИЛЬТРЫ
+      <button className="dsm-btn dsm-btn-blue" style={{ width: '100%', padding: '10px 0', fontSize: 14, fontWeight: 600, borderRadius: 9 }}>
+        Применить фильтры
       </button>
     </div>
   );
 }
 
-function ExportView() {
+/* ─── EXPORT ───────────────────────────────────────────────────── */
+function ExportPanel() {
   const [picked, setPicked] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
-  const [exporting, setExporting] = useState(false);
+  const [busy, setBusy] = useState(false);
 
-  const handleExport = () => {
-    if (!picked) return;
-    setExporting(true);
+  const start = () => {
+    if (!picked || busy) return;
+    setBusy(true);
     setProgress(0);
     const iv = setInterval(() => {
       setProgress((p) => {
-        if (p >= 100) { clearInterval(iv); setExporting(false); return 100; }
-        return p + Math.random() * 12;
+        if (p >= 100) { clearInterval(iv); setBusy(false); return 100; }
+        return p + Math.random() * 11;
       });
     }, 150);
   };
 
   return (
-    <div className="h-full overflow-y-auto p-6 space-y-6 animate-fade-in">
-      <h2 className="font-oswald text-2xl font-semibold tracking-wider glow-text" style={{ color: 'var(--neon-green)' }}>
-        ЭКСПОРТ ДАННЫХ
-      </h2>
+    <div className="h-full overflow-y-auto" style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <h2 style={{ fontSize: 17, fontWeight: 700, color: 'var(--dsm-text)' }}>Экспорт</h2>
 
-      <div className="grid grid-cols-2 gap-3">
-        {EXPORT_FORMATS.map((fmt) => (
-          <div key={fmt.id}
-            className="panel-glass rounded p-3 cursor-pointer transition-all hover:scale-[1.02]"
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+        {EXPORT_FORMATS.map((f) => (
+          <div key={f.id}
+            onClick={() => { setPicked(f.id); setProgress(0); setBusy(false); }}
             style={{
-              borderLeft: `3px solid ${picked === fmt.id ? fmt.color : '#1e2d1e'}`,
-              borderTop: '1px solid #1e2d1e', borderRight: '1px solid #1e2d1e', borderBottom: '1px solid #1e2d1e',
-              background: picked === fmt.id ? `${fmt.color}10` : 'rgba(13,19,24,0.95)',
-            }}
-            onClick={() => setPicked(fmt.id)}>
-            <div className="flex items-center gap-2 mb-1">
-              <Icon name={fmt.icon} size={14} style={{ color: fmt.color }} />
-              <span className="font-rajdhani text-sm font-semibold" style={{ color: '#ccd' }}>{fmt.label}</span>
-            </div>
-            <p className="font-mono text-[10px] leading-tight" style={{ color: '#556677' }}>{fmt.desc}</p>
+              padding: '12px 12px',
+              borderRadius: 9,
+              border: `1px solid ${picked === f.id ? f.color + '55' : 'var(--dsm-border)'}`,
+              background: picked === f.id ? f.color + '12' : 'var(--dsm-panel-alt)',
+              cursor: 'pointer',
+              transition: 'all 0.15s',
+            }}>
+            <Icon name={f.icon} size={16} style={{ color: f.color, marginBottom: 6 }} />
+            <div style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--dsm-text)' }}>{f.label}</div>
           </div>
         ))}
       </div>
 
-      <div className="panel-glass neon-border rounded p-4 space-y-3">
-        <div className="font-rajdhani text-sm font-semibold tracking-wider" style={{ color: '#aabbcc' }}>ПАРАМЕТРЫ</div>
-        {['Включить статистику', 'Включить легенду', 'Сжать данные', 'Добавить метаданные'].map((opt) => (
-          <label key={opt} className="flex items-center gap-3 cursor-pointer">
-            <div className="w-4 h-4 rounded border flex items-center justify-center"
-              style={{ borderColor: 'rgba(57,255,138,0.3)', background: 'rgba(57,255,138,0.08)' }}>
-              <Icon name="Check" size={10} style={{ color: 'var(--neon-green)' }} />
-            </div>
-            <span className="font-mono text-xs" style={{ color: '#778899' }}>{opt}</span>
-          </label>
+      {/* Options */}
+      <div className="dsm-panel" style={{ borderRadius: 10, overflow: 'hidden' }}>
+        <div style={{ padding: '10px 14px 4px', fontSize: 11, fontWeight: 600, color: 'var(--dsm-muted)', letterSpacing: '0.07em' }}>ПАРАМЕТРЫ</div>
+        {['Включить статистику', 'Легенда карты', 'Сжать данные', 'Метаданные'].map((opt, i) => (
+          <div key={opt}>
+            {i > 0 && <div className="dsm-divider" />}
+            <label style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 14px', cursor: 'pointer' }}>
+              <div style={{ width: 16, height: 16, borderRadius: 4, border: '1.5px solid var(--dsm-blue)', background: 'var(--dsm-blue-glow)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Icon name="Check" size={10} style={{ color: 'var(--dsm-blue)' }} />
+              </div>
+              <span style={{ fontSize: 13, color: 'var(--dsm-muted)' }}>{opt}</span>
+            </label>
+          </div>
         ))}
       </div>
 
-      {exporting && (
-        <div className="space-y-2">
-          <div className="flex justify-between font-mono text-xs" style={{ color: '#778899' }}>
-            <span>Экспорт...</span>
-            <span style={{ color: 'var(--neon-green)' }}>{Math.min(Math.round(progress), 100)}%</span>
+      {/* Progress */}
+      {(busy || progress === 100) && (
+        <div className="dsm-panel anim-fadein" style={{ borderRadius: 10, padding: '12px 14px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+            <span style={{ fontSize: 12, color: 'var(--dsm-muted)' }}>{busy ? 'Экспортирую...' : 'Готово'}</span>
+            <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--dsm-blue)' }}>{Math.min(Math.round(progress), 100)}%</span>
           </div>
-          <div className="w-full h-1 rounded" style={{ background: '#1e2d1e' }}>
-            <div className="h-full rounded transition-all duration-150"
-              style={{ width: `${Math.min(progress, 100)}%`, background: 'var(--neon-green)', boxShadow: '0 0 8px var(--neon-green)' }} />
+          <div style={{ height: 4, background: 'var(--dsm-border)', borderRadius: 4 }}>
+            <div className="dsm-progress-fill" style={{ width: `${Math.min(progress, 100)}%`, background: 'var(--dsm-blue)' }} />
           </div>
+          {progress >= 100 && !busy && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 10 }}>
+              <Icon name="CheckCircle" size={14} style={{ color: 'var(--dsm-green)' }} />
+              <span style={{ fontSize: 12, color: 'var(--dsm-green)' }}>Файл готов</span>
+            </div>
+          )}
         </div>
       )}
 
-      {progress >= 100 && !exporting && (
-        <div className="panel-glass rounded p-3 flex items-center gap-2 animate-fade-in"
-          style={{ border: '1px solid rgba(57,255,138,0.4)' }}>
-          <Icon name="CheckCircle" size={16} style={{ color: 'var(--neon-green)' }} />
-          <span className="font-mono text-xs" style={{ color: 'var(--neon-green)' }}>Файл готов к скачиванию</span>
-        </div>
-      )}
-
-      <button
-        className="w-full py-3 font-oswald text-sm font-semibold tracking-widest rounded transition-all hover:brightness-110 disabled:opacity-40"
-        disabled={!picked || exporting}
-        onClick={handleExport}
-        style={{
-          background: picked ? 'rgba(57,255,138,0.15)' : 'rgba(30,45,30,0.3)',
-          color:  picked ? 'var(--neon-green)' : '#445',
-          border: `1px solid ${picked ? 'rgba(57,255,138,0.4)' : '#1e2d1e'}`,
-        }}>
-        {exporting ? 'ЭКСПОРТИРУЮ...' : 'ЭКСПОРТИРОВАТЬ'}
+      <button className={`dsm-btn ${picked ? 'dsm-btn-blue' : ''}`}
+        disabled={!picked || busy}
+        onClick={start}
+        style={{ width: '100%', padding: '10px 0', fontSize: 14, fontWeight: 600, borderRadius: 9, opacity: (!picked || busy) ? 0.5 : 1 }}>
+        {busy ? 'Идёт экспорт...' : 'Экспортировать'}
       </button>
     </div>
   );
 }
 
-function HelpView() {
+/* ─── HELP ─────────────────────────────────────────────────────── */
+function HelpPanel() {
   const [open, setOpen] = useState<number | null>(0);
-  const items = [
-    { q: 'Как добавить маркер на карту?',    a: 'Нажмите на карте правой кнопкой мыши и выберите "Добавить объект". Заполните форму с типом, координатами и описанием объекта.' },
-    { q: 'Как включить/выключить слои?',     a: 'Перейдите в раздел "Слои". Каждый слой переключается кликом. Кнопка "Включить все" активирует все слои сразу.' },
-    { q: 'Как экспортировать данные?',       a: 'Раздел "Экспорт" — выберите формат (PDF, Excel, KML и др.), настройте параметры и нажмите "Экспортировать".' },
-    { q: 'Что означают цвета маркеров?',     a: 'Зелёный — свои позиции. Красный — противник. Оранжевый — нейтральные. Синий — разведывательные данные.' },
-    { q: 'Как настроить фильтры?',           a: 'Раздел "Фильтры" — выберите временной диапазон, тип объекта, приоритет угрозы и радиус поиска. Нажмите "Применить".' },
-    { q: 'Как обновляются данные?',          a: 'Данные обновляются каждые 5 минут. Индикатор LIVE в правом углу карты показывает активное соединение.' },
-  ];
 
   return (
-    <div className="h-full overflow-y-auto p-6 space-y-6 animate-fade-in">
-      <h2 className="font-oswald text-2xl font-semibold tracking-wider glow-text" style={{ color: 'var(--neon-green)' }}>
-        СПРАВКА
-      </h2>
+    <div className="h-full overflow-y-auto" style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <h2 style={{ fontSize: 17, fontWeight: 700, color: 'var(--dsm-text)' }}>Справка</h2>
 
-      <div className="panel-glass neon-border rounded p-4 flex items-center gap-3">
-        <Icon name="Shield" size={20} style={{ color: 'var(--neon-green)' }} />
+      {/* Version */}
+      <div className="dsm-panel" style={{ borderRadius: 10, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ width: 38, height: 38, borderRadius: 9, background: 'var(--dsm-blue-glow)', border: '1px solid rgba(59,130,246,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <Icon name="Globe" size={18} style={{ color: 'var(--dsm-blue)' }} />
+        </div>
         <div>
-          <div className="font-rajdhani text-sm font-semibold" style={{ color: '#ccd' }}>ТАКТИКА v1.0.0</div>
-          <div className="font-mono text-xs" style={{ color: '#556677' }}>Военно-аналитическая карта • Россия</div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--dsm-text)' }}>ТАКТИКА v1.0.0</div>
+          <div style={{ fontSize: 12, color: 'var(--dsm-muted)' }}>Военно-аналитическая карта · РФ</div>
+        </div>
+        <div className="dsm-badge" style={{ marginLeft: 'auto', background: 'rgba(34,197,94,0.12)', color: '#22c55e' }}>
+          <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#22c55e' }} className="blink" />
+          Онлайн
         </div>
       </div>
 
-      <div className="space-y-2">
-        {items.map((item, i) => (
-          <div key={i} className="panel-glass rounded overflow-hidden"
-            style={{ border: `1px solid ${open === i ? 'rgba(57,255,138,0.25)' : '#1e2d1e'}` }}>
-            <button className="w-full flex items-center justify-between p-4 text-left transition-all hover:bg-[rgba(57,255,138,0.04)]"
-              onClick={() => setOpen(open === i ? null : i)}>
-              <span className="font-rajdhani text-sm font-medium" style={{ color: open === i ? 'var(--neon-green)' : '#aabbcc' }}>
-                {item.q}
-              </span>
-              <Icon name={open === i ? 'ChevronUp' : 'ChevronDown'} size={14}
-                style={{ color: open === i ? 'var(--neon-green)' : '#445566', flexShrink: 0 }} />
-            </button>
-            {open === i && (
-              <div className="px-4 pb-4 font-mono text-xs leading-relaxed animate-fade-in"
-                style={{ color: '#778899', borderTop: '1px solid #1e2d1e', paddingTop: '12px' }}>
-                {item.a}
-              </div>
-            )}
+      {/* FAQ */}
+      <div className="dsm-panel" style={{ borderRadius: 10, overflow: 'hidden' }}>
+        {HELP_ITEMS.map((item, i) => (
+          <div key={i}>
+            {i > 0 && <div className="dsm-divider" />}
+            <div>
+              <button
+                style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '11px 14px', background: 'none', border: 'none', cursor: 'pointer', gap: 10 }}
+                onClick={() => setOpen(open === i ? null : i)}>
+                <span style={{ fontSize: 13.5, fontWeight: 500, color: open === i ? 'var(--dsm-blue)' : 'var(--dsm-text)', textAlign: 'left' }}>
+                  {item.q}
+                </span>
+                <Icon name={open === i ? 'ChevronUp' : 'ChevronDown'} size={14} style={{ color: 'var(--dsm-muted)', flexShrink: 0 }} />
+              </button>
+              {open === i && (
+                <div className="anim-fadein" style={{ padding: '0 14px 12px', fontSize: 13, color: 'var(--dsm-muted)', lineHeight: 1.65, borderTop: '1px solid var(--dsm-border)' }}>
+                  <br />{item.a}
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>
 
-      <div className="panel-glass rounded p-4 space-y-2" style={{ border: '1px solid rgba(255,107,26,0.2)' }}>
-        <div className="font-rajdhani text-sm font-semibold mb-3" style={{ color: 'var(--neon-orange)' }}>ГОРЯЧИЕ КЛАВИШИ</div>
-        {[['M', 'Карта'], ['A', 'Аналитика'], ['L', 'Слои'], ['+/−', 'Масштаб карты'], ['Esc', 'Закрыть панель']].map(([key, desc]) => (
-          <div key={key} className="flex items-center justify-between">
-            <span className="font-mono text-xs" style={{ color: '#556677' }}>{desc}</span>
-            <kbd className="px-2 py-0.5 rounded font-mono text-xs"
-              style={{ background: 'rgba(255,107,26,0.1)', color: 'var(--neon-orange)', border: '1px solid rgba(255,107,26,0.3)' }}>
-              {key}
-            </kbd>
+      {/* Hotkeys */}
+      <div className="dsm-panel" style={{ borderRadius: 10, overflow: 'hidden' }}>
+        <div style={{ padding: '10px 14px 4px', fontSize: 11, fontWeight: 600, color: 'var(--dsm-muted)', letterSpacing: '0.07em' }}>
+          ГОРЯЧИЕ КЛАВИШИ
+        </div>
+        {[['M', 'Карта'], ['A', 'Аналитика'], ['L', 'Слои'], ['F', 'Фильтры'], ['Esc', 'Закрыть']].map(([k, d], i) => (
+          <div key={k}>
+            {i > 0 && <div className="dsm-divider" />}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 14px' }}>
+              <span style={{ fontSize: 13, color: 'var(--dsm-muted)' }}>{d}</span>
+              <kbd style={{ padding: '2px 8px', borderRadius: 5, background: 'var(--dsm-panel-alt)', border: '1px solid var(--dsm-border)', fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: 'var(--dsm-text)' }}>{k}</kbd>
+            </div>
           </div>
         ))}
       </div>
@@ -554,8 +579,9 @@ function HelpView() {
   );
 }
 
+/* ─── ROOT ─────────────────────────────────────────────────────── */
 export default function Index() {
-  const [activeTab, setActiveTab] = useState<Tab>('map');
+  const [tab, setTab] = useState<Tab>('map');
   const [time, setTime] = useState('');
   const [collapsed, setCollapsed] = useState(false);
 
@@ -568,126 +594,114 @@ export default function Index() {
 
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
-      if (e.key === 'm') setActiveTab('map');
-      if (e.key === 'a') setActiveTab('analytics');
-      if (e.key === 'l') setActiveTab('layers');
+      const map: Record<string, Tab> = { m: 'map', a: 'analytics', l: 'layers', f: 'filters' };
+      if (map[e.key]) setTab(map[e.key]);
     };
     window.addEventListener('keydown', h);
     return () => window.removeEventListener('keydown', h);
   }, []);
 
   return (
-    <div className="w-screen h-screen flex flex-col overflow-hidden" style={{ background: 'var(--dark-bg)' }}>
+    <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--dsm-bg)', fontFamily: "'Golos Text', system-ui, sans-serif" }}>
 
-      {/* TOP BAR */}
-      <header className="flex-shrink-0 flex items-center justify-between px-4 panel-glass"
-        style={{ borderBottom: '1px solid var(--panel-border)', height: '48px' }}>
-        <div className="flex items-center gap-3">
-          <div className="w-7 h-7 rounded flex items-center justify-center"
-            style={{ background: 'rgba(57,255,138,0.15)', border: '1px solid rgba(57,255,138,0.3)' }}>
-            <Icon name="Crosshair" size={14} style={{ color: 'var(--neon-green)' }} />
+      {/* ── TOP BAR ── */}
+      <header style={{
+        flexShrink: 0, height: 52, display: 'flex', alignItems: 'center',
+        justifyContent: 'space-between', padding: '0 16px',
+        background: 'var(--dsm-panel)', borderBottom: '1px solid var(--dsm-border)',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 30, height: 30, borderRadius: 8, background: 'var(--dsm-blue-glow)', border: '1px solid rgba(59,130,246,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name="Crosshair" size={15} style={{ color: 'var(--dsm-blue)' }} />
           </div>
-          <span className="font-oswald text-base font-bold tracking-widest glow-text" style={{ color: 'var(--neon-green)' }}>
+          <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--dsm-text)', letterSpacing: '-0.01em' }}>
             ТАКТИКА
           </span>
-          <span className="font-mono text-[10px]" style={{ color: '#334455' }}>v1.0</span>
+          <span style={{ fontSize: 11, color: 'var(--dsm-muted)', background: 'var(--dsm-panel-alt)', padding: '1px 6px', borderRadius: 4, border: '1px solid var(--dsm-border)' }}>
+            v1.0
+          </span>
         </div>
 
-        <div className="flex items-center gap-6">
-          <div className="hidden md:flex items-center gap-4">
-            {[{ label: 'СОЕДИНЕНИЕ', ok: true }, { label: 'ДАННЫЕ', ok: true }, { label: 'СИНХРОН.', ok: false }].map((s) => (
-              <div key={s.label} className="flex items-center gap-1.5">
-                <div className={`status-blip ${s.ok ? '' : 'orange'} animate-blink`} />
-                <span className="font-mono text-[9px]" style={{ color: '#445566' }}>{s.label}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            {[{ l: 'Соединение', ok: true }, { l: 'Синхронизация', ok: false }].map((s) => (
+              <div key={s.l} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                <div className={s.ok ? 'blink' : ''} style={{ width: 6, height: 6, borderRadius: '50%', background: s.ok ? '#22c55e' : '#f97316', boxShadow: `0 0 5px ${s.ok ? '#22c55e' : '#f97316'}` }} />
+                <span style={{ fontSize: 11, color: 'var(--dsm-muted)' }}>{s.l}</span>
               </div>
             ))}
           </div>
-          <div className="font-mono text-sm" style={{ color: 'var(--neon-green)', textShadow: '0 0 8px rgba(57,255,138,0.5)' }}>
+          <span style={{ fontSize: 13, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: 'var(--dsm-text)' }}>
             {time}
-          </div>
-          <span className="font-mono text-[10px]" style={{ color: '#445566' }}>МСК</span>
+          </span>
+          <span style={{ fontSize: 10, color: 'var(--dsm-muted)' }}>МСК</span>
         </div>
       </header>
 
-      {/* MAIN */}
-      <div className="flex-1 flex overflow-hidden">
+      {/* ── BODY ── */}
+      <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
 
         {/* SIDEBAR */}
-        <aside className="flex-shrink-0 flex flex-col panel-glass transition-all duration-300"
-          style={{ width: collapsed ? '52px' : '196px', borderRight: '1px solid var(--panel-border)' }}>
+        <aside style={{
+          flexShrink: 0, display: 'flex', flexDirection: 'column',
+          width: collapsed ? 52 : 210,
+          background: 'var(--dsm-panel)', borderRight: '1px solid var(--dsm-border)',
+          transition: 'width 0.25s ease',
+        }}>
           <button
-            className="p-3 flex items-center justify-center transition-all hover:bg-[rgba(57,255,138,0.06)]"
-            style={{ borderBottom: '1px solid var(--panel-border)', color: '#445566' }}
-            onClick={() => setCollapsed(!collapsed)}>
-            <Icon name={collapsed ? 'ChevronRight' : 'ChevronLeft'} size={14} />
+            onClick={() => setCollapsed(!collapsed)}
+            style={{ height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid var(--dsm-border)', background: 'none', border: 'none', borderBottom: '1px solid var(--dsm-border)', cursor: 'pointer', color: 'var(--dsm-muted)', flexShrink: 0 }}>
+            <Icon name={collapsed ? 'ChevronRight' : 'ChevronLeft'} size={16} />
           </button>
 
-          <nav className="flex-1 py-2">
-            {NAV_ITEMS.map((item) => (
+          <nav style={{ flex: 1, padding: 8, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            {NAV.map((item) => (
               <button key={item.id}
-                className={`nav-item w-full flex items-center gap-3 px-3 py-3 text-left ${activeTab === item.id ? 'nav-item-active' : ''}`}
-                style={{ color: activeTab === item.id ? 'var(--neon-green)' : '#556677' }}
-                onClick={() => setActiveTab(item.id)}>
+                className={`dsm-nav-item ${tab === item.id ? 'active' : ''}`}
+                style={{ justifyContent: collapsed ? 'center' : 'flex-start', padding: collapsed ? '8px 0' : '8px 12px' }}
+                onClick={() => setTab(item.id)}>
                 <Icon name={item.icon} size={16} style={{ flexShrink: 0 }} />
-                {!collapsed && (
-                  <span className="font-rajdhani text-sm font-medium tracking-wide">{item.label}</span>
-                )}
+                {!collapsed && <span>{item.label}</span>}
               </button>
             ))}
           </nav>
 
           {!collapsed && (
-            <div className="p-3 space-y-1" style={{ borderTop: '1px solid var(--panel-border)' }}>
-              <div className="font-mono text-[9px]" style={{ color: '#334455' }}>11.06.2026</div>
-              <div className="flex items-center gap-1">
-                <div className="status-blip" />
-                <span className="font-mono text-[9px]" style={{ color: '#445566' }}>СИСТЕМА АКТИВНА</span>
-              </div>
+            <div style={{ padding: '10px 14px', borderTop: '1px solid var(--dsm-border)', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <div className="blink" style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 5px #22c55e' }} />
+              <span style={{ fontSize: 11, color: 'var(--dsm-muted)' }}>Система активна</span>
             </div>
           )}
         </aside>
 
         {/* CONTENT */}
-        <main className="flex-1 overflow-hidden relative">
-          {activeTab === 'map' && (
-            <div className="w-full h-full relative">
-              <MapView />
-              <div className="absolute top-3 left-3 z-[600] flex gap-2">
-                <div className="panel-glass neon-border px-3 py-1.5 font-mono text-xs flex items-center gap-2">
-                  <Icon name="MapPin" size={11} style={{ color: 'var(--neon-orange)' }} />
-                  <span style={{ color: '#778899' }}>Зона: </span>
-                  <span style={{ color: 'var(--neon-orange)' }}>Восточная Европа</span>
-                </div>
-                <div className="panel-glass neon-border px-3 py-1.5 font-mono text-xs flex items-center gap-2">
-                  <div className="status-blip animate-blink" />
-                  <span style={{ color: '#778899' }}>Объектов: </span>
-                  <span style={{ color: 'var(--neon-green)' }}>2 841</span>
-                </div>
-              </div>
-            </div>
-          )}
-          {activeTab === 'analytics' && <div className="w-full h-full overflow-hidden"><AnalyticsView /></div>}
-          {activeTab === 'layers'    && <div className="w-full h-full overflow-hidden"><LayersView /></div>}
-          {activeTab === 'filters'   && <div className="w-full h-full overflow-hidden"><FiltersView /></div>}
-          {activeTab === 'export'    && <div className="w-full h-full overflow-hidden"><ExportView /></div>}
-          {activeTab === 'help'      && <div className="w-full h-full overflow-hidden"><HelpView /></div>}
+        <main style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
+          {tab === 'map'       && <div style={{ width: '100%', height: '100%' }}><MapPanel /></div>}
+          {tab === 'analytics' && <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}><AnalyticsPanel /></div>}
+          {tab === 'layers'    && <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}><LayersPanel /></div>}
+          {tab === 'filters'   && <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}><FiltersPanel /></div>}
+          {tab === 'export'    && <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}><ExportPanel /></div>}
+          {tab === 'help'      && <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}><HelpPanel /></div>}
         </main>
-
       </div>
 
-      {/* BOTTOM BAR */}
-      <footer className="flex-shrink-0 flex items-center justify-between px-4 panel-glass"
-        style={{ borderTop: '1px solid var(--panel-border)', height: '26px' }}>
-        <div className="flex items-center gap-4">
-          <span className="font-mono text-[9px]" style={{ color: '#334455' }}>ТАКТИКА • ВОЕННО-АНАЛИТИЧЕСКАЯ КАРТА</span>
-          <div className="flex items-center gap-1">
-            <div className="status-blip" style={{ width: '5px', height: '5px' }} />
-            <span className="font-mono text-[9px]" style={{ color: '#39ff8a55' }}>SECURE CONNECTION</span>
+      {/* ── BOTTOM BAR ── */}
+      <footer style={{
+        flexShrink: 0, height: 28, display: 'flex', alignItems: 'center',
+        justifyContent: 'space-between', padding: '0 16px',
+        background: 'var(--dsm-panel)', borderTop: '1px solid var(--dsm-border)',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <span style={{ fontSize: 11, color: 'var(--dsm-muted)' }}>ТАКТИКА · Военно-аналитическая карта</span>
+          <span style={{ fontSize: 11, color: 'var(--dsm-border)' }}>|</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+            <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#22c55e' }} />
+            <span style={{ fontSize: 11, color: 'var(--dsm-muted)' }}>Защищённое соединение</span>
           </div>
         </div>
-        <div className="flex items-center gap-4">
-          <span className="font-mono text-[9px]" style={{ color: '#334455' }}>Объектов: 2841</span>
-          <span className="font-mono text-[9px]" style={{ color: '#39ff8a44' }}>© 2026 ТАКТИКА</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <span style={{ fontSize: 11, color: 'var(--dsm-muted)' }}>Объектов: 2 841</span>
+          <span style={{ fontSize: 11, color: 'var(--dsm-muted)' }}>© 2026 ТАКТИКА</span>
         </div>
       </footer>
 
