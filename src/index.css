@@ -4,89 +4,43 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 220 20% 6%;
+    --foreground: 120 40% 85%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 220 18% 9%;
+    --card-foreground: 120 30% 80%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 220 18% 9%;
+    --popover-foreground: 120 30% 80%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 120 60% 45%;
+    --primary-foreground: 220 20% 6%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 220 15% 14%;
+    --secondary-foreground: 120 30% 75%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 15% 12%;
+    --muted-foreground: 220 10% 50%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 30 100% 55%;
+    --accent-foreground: 220 20% 6%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 80% 50%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 220 15% 18%;
+    --input: 220 15% 14%;
+    --ring: 120 60% 45%;
 
-    --radius: 0.5rem;
+    --radius: 0.25rem;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --neon-green: #39ff8a;
+    --neon-orange: #ff6b1a;
+    --neon-red: #ff3b30;
+    --neon-blue: #00d4ff;
+    --dark-bg: #080d10;
+    --panel-bg: #0d1318;
+    --panel-border: #1e2d1e;
   }
 }
 
@@ -97,5 +51,287 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: "Rajdhani", sans-serif;
+    background-color: var(--dark-bg);
+    overflow: hidden;
   }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0d1318;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--neon-green);
+    border-radius: 2px;
+  }
+}
+
+/* Leaflet overrides */
+.leaflet-container {
+  background: #0a0f12 !important;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.leaflet-tile-pane {
+  filter: saturate(0.4) brightness(0.55) hue-rotate(100deg) !important;
+}
+
+.leaflet-control-zoom {
+  display: none;
+}
+
+.leaflet-control-attribution {
+  background: rgba(8, 13, 16, 0.8) !important;
+  color: #39ff8a44 !important;
+  font-size: 9px !important;
+  border: none !important;
+}
+
+.leaflet-control-attribution a {
+  color: #39ff8a66 !important;
+}
+
+/* Custom map markers */
+.tactic-marker {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid;
+  box-shadow: 0 0 8px currentColor;
+  animation: pulse-marker 2s infinite;
+}
+
+.tactic-marker.friendly {
+  color: var(--neon-green);
+  background: #39ff8a44;
+  border-color: var(--neon-green);
+}
+.tactic-marker.enemy {
+  color: var(--neon-red);
+  background: #ff3b3044;
+  border-color: var(--neon-red);
+}
+.tactic-marker.neutral {
+  color: var(--neon-orange);
+  background: #ff6b1a44;
+  border-color: var(--neon-orange);
+}
+.tactic-marker.intel {
+  color: var(--neon-blue);
+  background: #00d4ff44;
+  border-color: var(--neon-blue);
+}
+
+@keyframes pulse-marker {
+  0%,
+  100% {
+    box-shadow: 0 0 6px currentColor;
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 14px currentColor;
+    transform: scale(1.1);
+  }
+}
+
+/* Panel styles */
+.panel-glass {
+  background: rgba(13, 19, 24, 0.95);
+  border: 1px solid var(--panel-border);
+  backdrop-filter: blur(12px);
+}
+
+.neon-border {
+  border: 1px solid rgba(57, 255, 138, 0.25);
+  box-shadow:
+    inset 0 0 20px rgba(57, 255, 138, 0.03),
+    0 0 1px rgba(57, 255, 138, 0.4);
+}
+
+.neon-border-orange {
+  border: 1px solid rgba(255, 107, 26, 0.35);
+  box-shadow: 0 0 1px rgba(255, 107, 26, 0.5);
+}
+
+.glow-text {
+  text-shadow:
+    0 0 12px var(--neon-green),
+    0 0 24px rgba(57, 255, 138, 0.3);
+}
+
+.glow-text-orange {
+  text-shadow: 0 0 8px var(--neon-orange);
+}
+
+/* Scan line effect */
+.scanlines::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes progress-bar {
+  from {
+    width: 0%;
+  }
+  to {
+    width: var(--target-width);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease forwards;
+}
+.animate-slide-left {
+  animation: slide-in-left 0.3s ease forwards;
+}
+.animate-slide-right {
+  animation: slide-in-right 0.3s ease forwards;
+}
+.animate-blink {
+  animation: blink 1.5s infinite;
+}
+
+/* Nav active state */
+.nav-item-active {
+  background: rgba(57, 255, 138, 0.1);
+  color: var(--neon-green) !important;
+  border-left: 2px solid var(--neon-green);
+}
+
+.nav-item {
+  transition: all 0.2s ease;
+  border-left: 2px solid transparent;
+}
+
+.nav-item:hover {
+  background: rgba(57, 255, 138, 0.06);
+  border-left-color: rgba(57, 255, 138, 0.4);
+  color: #a0ffcc;
+}
+
+/* Status bar blip */
+.status-blip {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--neon-green);
+  box-shadow: 0 0 6px var(--neon-green);
+}
+.status-blip.red {
+  background: var(--neon-red);
+  box-shadow: 0 0 6px var(--neon-red);
+}
+.status-blip.orange {
+  background: var(--neon-orange);
+  box-shadow: 0 0 6px var(--neon-orange);
+}
+
+/* Chart bar */
+.chart-bar {
+  transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Toggle switch */
+.toggle-layer {
+  width: 32px;
+  height: 16px;
+  border-radius: 8px;
+  background: rgba(57, 255, 138, 0.15);
+  border: 1px solid rgba(57, 255, 138, 0.3);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.toggle-layer.active {
+  background: rgba(57, 255, 138, 0.3);
+  border-color: var(--neon-green);
+  box-shadow: 0 0 8px rgba(57, 255, 138, 0.4);
+}
+
+.toggle-layer::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(57, 255, 138, 0.5);
+  transition: all 0.2s ease;
+}
+
+.toggle-layer.active::after {
+  left: 18px;
+  background: var(--neon-green);
+  box-shadow: 0 0 6px var(--neon-green);
+}
+
+/* Map grid overlay */
+.map-grid-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 500;
+  background-image:
+    linear-gradient(rgba(57, 255, 138, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(57, 255, 138, 0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
 }
